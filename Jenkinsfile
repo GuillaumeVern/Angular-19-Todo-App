@@ -105,7 +105,7 @@ pipeline {
                     }
 
                     dir(nginxDir) {
-                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" nginx.conf sshuser@podman.losvernos.local:~/Angular-19-Todo-App/nginx/nginx.conf'
+                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" nginx.conf sshuser@podman.losvernos.local:~/Angular-19-Todo-App/nginx/'
                     }
 
                     sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" docker-compose-prod.yml sshuser@podman.losvernos.local:~/Angular-19-Todo-App/docker-compose.yml'
