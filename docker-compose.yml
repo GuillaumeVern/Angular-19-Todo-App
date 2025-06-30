@@ -1,7 +1,9 @@
 services:
   frontend:
     container_name: frontend
-    build: frontend
+    build: 
+      context: frontend
+      dockerfile: Dockerfile
     ports:
       - 4200:4200
     depends_on:
@@ -12,7 +14,9 @@ services:
 
   backend:
     container_name: backend
-    build: backend
+    build: 
+      context: backend
+      dockerfile: Dockerfile
     ports:
       - 44600:8080
     depends_on:
@@ -20,7 +24,9 @@ services:
 
   db:
     container_name: db
-    build: db
+    build: 
+      context: db
+      dockerfile: Dockerfile
     ports:
       - 5432:5432
     volumes:
