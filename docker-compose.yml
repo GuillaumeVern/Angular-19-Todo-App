@@ -24,12 +24,11 @@ services:
 
   db:
     container_name: db
-    build: 
-      context: db
-      dockerfile: Dockerfile
+    image: postgres:17-alpine
     ports:
       - 5432:5432
     volumes:
+      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - db_data:/var/lib/postgresql
     environment:
       - POSTGRES_USER=$POSTGRES_USER
