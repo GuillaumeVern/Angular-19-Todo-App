@@ -7,10 +7,6 @@ def nginxDir = 'nginx'
 pipeline {
     agent any
 
-    triggers {
-        pollSCM('H/5 * * * *') 
-    }
-
     tools {
         nodejs 'nodejs-22'
         maven 'Maven-3.9'
