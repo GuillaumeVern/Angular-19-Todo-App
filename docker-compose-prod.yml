@@ -12,13 +12,13 @@ services:
 
   backend:
     container_name: backend
-    image: tomcat:10.1-jdk21
+    image: eclipse-temurin:21-jdk-alpine
     ports:
       - 44600:8080
     depends_on:
       - db
     volumes:
-      - ./backend/target/app.jar:/opt/tomcat/webapps/app.jar
+      - ./backend/target/app.jar:/app/app.jar
 
   db:
     container_name: db
