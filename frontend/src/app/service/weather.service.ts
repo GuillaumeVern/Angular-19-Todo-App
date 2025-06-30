@@ -19,6 +19,7 @@ export class WeatherService {
 
   constructor(private http: HttpClient) {
     this.loadCachedWeather();
+    console.log(this.apiKey);
   }
 
   getWeather(city: string): Observable<WeatherData> {
