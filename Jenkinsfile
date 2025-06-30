@@ -104,7 +104,19 @@ pipeline {
                     }
 
                     sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" docker-compose-prod.yml sshuser@podman.losvernos.local:~/Angular-19-Todo-App/docker-compose.yml'
-                    sh 'ssh -p 4522 sshuser@losvernos.com "cd ~/Angular-19-Todo-App && podman-compose down --remove-orphans && podman-compose up -d --build --remove-orphans"'
+                    ssh -p 4522 sshuser@losvernos.com << 'EOF'
+                        set -e  # exit on error
+                        cd ~/Angular-19-Todo-App
+
+                        echo "Bringing down any existing containers..."
+                        podman-compose down --remove-orphans || true
+
+                        echo "Bringing up new containers in detached mode..."
+                        podman-compose up -d --build --remove-orphans
+
+                        echo "Checking container status..."
+                        podman ps
+                    EOF
                 }
             }
         }
