@@ -1,26 +1,24 @@
 services:
   frontend:
     container_name: frontend
-    build: 
-      context: frontend
-      dockerfile: Dockerfile
+    image: nginx:stable-alpine
     ports:
       - 4200:4200
     depends_on:
       - backend
     volumes:
-          - ./frontend/:/usr/src/app
-          - node_modules:/usr/src/app/node_modules
+      - ./frontend/dist/abubakkar-apps/browser:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
   backend:
     container_name: backend
-    build: 
-      context: backend
-      dockerfile: Dockerfile
+    image: tomcat:10.1-jdk21
     ports:
       - 44600:8080
     depends_on:
       - db
+    volumes:
+      - ./backend/target/app.jar:/opt/tomcat/webapps/app.jar
 
   db:
     container_name: db

@@ -1,0 +1,231 @@
+# yaml-language-server: $schema=https://json-schema.org/draft/2020-12/schema
+
+openapi: 3.0.1
+info:
+  title: Angular 19 Todo App API
+  version: 1.0.0
+  description: API for managing users and tasks in the Angular 19 Todo App
+
+servers:
+  - url: http://localhost:44600/
+    description: Local development server
+  - url: https://podman.losvernos.com/api
+    description: Production server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: User deleted
+        '404':
+          description: User not found
+  /users/{id}/tasks:
+    get:
+      summary: Get all tasks
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+    post:
+      summary: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+    /users/{id}/{id}:
+      get:
+        summary: Get a task by ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Task found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Task'
+          '404':
+            description: Task not found
+      put:
+        summary: Update a task by ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        responses:
+          '200':
+            description: Task updated
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Task'
+          '404':
+            description: Task not found
+      delete:
+        summary: Delete a task by ID
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          '204':
+            description: Task deleted
+          '404':
+            description: Task not found
+
+        components:
+          schemas:
+            User:
+              type: object
+              properties:
+                nom:
+                  type: string
+                prenom:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - nom
+                - prenom
+                - email
+            Task:
+              type: object
+              properties:
+                libelle:
+                  type: string
+                completed:
+                  type: boolean
+              required:
+                - libelle
+                - completed
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        nom:
+          type: string
+        prenom:
+          type: string
+        email:
+          type: string
+          format: email
+      required:
+        - nom
+        - prenom
+        - email
+    Task:
+      type: object
+      properties:
+        libelle:
+          type: string
+        completed:
+          type: boolean
+      required:
+        - libelle
+        - completed
