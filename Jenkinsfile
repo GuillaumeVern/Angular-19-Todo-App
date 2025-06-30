@@ -96,14 +96,14 @@ pipeline {
             steps {
                 script {
                     dir(frontendDir) {
-                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" dist/abubakkar-apps/browser sshuser@losvernos.com:~/Angular-19-Todo-App/frontend/'
+                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" dist/abubakkar-apps/browser sshuser@podman.losvernos.local:~/Angular-19-Todo-App/frontend/'
                     }
 
                     dir(backendDir) {
-                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" target/app.jar sshuser@losvernos.com:~/Angular-19-Todo-App/backend/app.jar'
+                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" target/app.jar sshuser@podman.losvernos.local:~/Angular-19-Todo-App/backend/app.jar'
                     }
 
-                    sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" docker-compose-prod.yml sshuser@losvernos.com:~/Angular-19-Todo-App/docker-compose.yml'
+                    sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" docker-compose-prod.yml sshuser@podman.losvernos.local:~/Angular-19-Todo-App/docker-compose.yml'
                     sh 'ssh -p 4522 sshuser@losvernos.com "cd ~/Angular-19-Todo-App && docker compose down --remove-orphans && docker compose up -d --build --remove-orphans"'
                 }
             }
