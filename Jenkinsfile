@@ -104,7 +104,7 @@ pipeline {
                     }
 
                     sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" docker-compose-prod.yml sshuser@podman.losvernos.local:~/Angular-19-Todo-App/docker-compose.yml'
-                    sh 'ssh -p 4522 sshuser@losvernos.com "cd ~/Angular-19-Todo-App && docker compose down --remove-orphans && docker compose up -d --build --remove-orphans"'
+                    sh 'ssh -p 4522 sshuser@losvernos.com "cd ~/Angular-19-Todo-App && podman-compose down --remove-orphans && podman-compose up -d --build --remove-orphans"'
                 }
             }
         }
