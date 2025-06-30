@@ -52,7 +52,7 @@ pipeline {
                     withEnv(["JAVA_HOME=${jdkHome}", "PATH=${jdkHome}/bin:${env.PATH}"]) {
                         dir(backendDir) {
                             sh 'mvn clean package -DskipTests'
-                            sh 'mv target/*.jar app.jar'
+                            sh 'mv target/*.jar target/app.jar'
                         }
                     }
                 }
