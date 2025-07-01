@@ -18,7 +18,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./backend/target/app.jar:/app/app.jar
+      - ./backend/target:/app
     command: ["java", "-jar", "/app/app.jar"]
 
   db:
@@ -27,7 +27,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db:/docker-entrypoint-initdb.d
       - db_data:/var/lib/postgresql
     environment:
       - POSTGRES_USER=$POSTGRES_USER
