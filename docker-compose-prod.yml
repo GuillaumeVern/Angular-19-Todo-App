@@ -19,6 +19,7 @@ services:
       - db
     volumes:
       - ./backend/target/app.jar:/app/app.jar
+    command: ["java", "-jar", "/app/app.jar"]
 
   db:
     container_name: db

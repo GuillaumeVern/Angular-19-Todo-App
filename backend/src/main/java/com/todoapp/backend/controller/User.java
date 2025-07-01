@@ -15,7 +15,7 @@ public class User {
     @GetMapping("/")
     public String getAllUsers() {
 
-        return "all userssssss test webhook";
+        return "all userssssss";
     }
 
     @PostMapping("create")
