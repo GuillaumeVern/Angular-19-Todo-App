@@ -100,7 +100,7 @@ pipeline {
                     }
 
                     dir(backendDir) {
-                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" target/app.jar sshuser@podman.losvernos.local:~/Angular-19-Todo-App/backend/app.jar'
+                        sh 'rsync -avzr --mkpath --delete -e "ssh -p 4522" target/app.jar sshuser@podman.losvernos.local:~/Angular-19-Todo-App/backend/'
                     }
 
                     dir(nginxDir) {
