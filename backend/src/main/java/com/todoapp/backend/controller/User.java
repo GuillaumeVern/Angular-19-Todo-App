@@ -20,6 +20,7 @@ public class User {
 
     @PostMapping("create")
     public String createUser(String user) {
+        user = "User created: " + user;
         return user;
     }
 }
