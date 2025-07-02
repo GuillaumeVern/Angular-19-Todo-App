@@ -116,8 +116,10 @@ cd ~/Angular-19-Todo-App
 echo "Bringing down any existing containers..."
 podman-compose down --remove-orphans || true
 
-echo "Bringing up new containers in detached mode..."
-podman-compose up -d --build --remove-orphans
+echo "Starting containers as systemd services..."
+podman-compose build
+systemctl --user daemon-reload
+systemctl --user restart container-*.service
 
 echo "Checking container status..."
 podman ps
