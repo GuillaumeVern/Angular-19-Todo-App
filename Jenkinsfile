@@ -113,9 +113,6 @@ ssh -T -p 4522 sshuser@losvernos.com << 'EOF'
 set -e  # exit on error
 cd ~/Angular-19-Todo-App
 
-echo "Bringing down any existing containers..."
-podman-compose down --remove-orphans || true
-
 echo "Starting containers as systemd services..."
 podman-compose build
 systemctl --user daemon-reload
