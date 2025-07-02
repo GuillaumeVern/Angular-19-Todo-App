@@ -12,7 +12,7 @@ public class User {
 
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String getAllUsers() {
 
         return "all userssssss";
