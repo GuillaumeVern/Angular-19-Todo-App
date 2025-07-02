@@ -63,7 +63,7 @@ pipeline {
             steps {
                 configFileProvider([configFile(fileId: '18a658b0-a1ac-44b6-84b9-7f790465c0db', variable: 'ENV_FILE_PATH')]) {
                     script {
-                        sh "cp ${ENV_FILE_PATH} .env"
+                        sh "cp ${ENV_FmILE_PATH} .env"
                         sh 'cat .env'
                         sh "docker compose up -d --build --remove-orphans"
                     }
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     dir(backendDir) {
-                        sh 'mvn test'
+                        sh 'mvn test -Dspring.profiles.active=test'
                     }
                 }
             }
