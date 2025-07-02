@@ -24,6 +24,9 @@
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
+        <li class="nav-item" [class.active]="currentRoute === '/members'">
+          <a class="nav-link" routerLink="/members" (click)="closeNavbar()">Members</a>
+        </li>
         <li class="nav-item" [class.active]="currentRoute === '/tasks'">
           <a class="nav-link" routerLink="/tasks" (click)="closeNavbar()">Task Cards</a>
         </li>
@@ -36,6 +39,9 @@
         <li class="nav-item" [class.active]="currentRoute === '/guess-word'">
           <a class="nav-link" routerLink="/guess-word" (click)="closeNavbar()">Guess Game</a>
         </li>
+        <li class="nav-item" >
+          <button class="nav-link btn btn-link" type="button" tabindex="0" (click)="logout()">Logout</button>
+        </li>
       </ul>
     </div>
   </div>
@@ -46,18 +52,40 @@
   <div class="modal-dialog">
     <div class="modal-content dark-modal">
       <div class="modal-header">
-        <h5 class="modal-title" id="userNameModalLabel">Enter Your Name</h5>
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+          <h5 *ngIf="isRegister" class="modal-title" id="userNameModalLabel">Register</h5>
+          <h5 *ngIf="!isRegister" class="modal-title" id="userNameModalLabel">Login</h5>
+          <button *ngIf="!isRegister" type="button" class="btn btn-secondary" (click)="toggleRegister()">Register Here</button>
+          <button *ngIf="isRegister" type="button" class="btn btn-secondary" (click)="toggleRegister()">Login Here</button>
+        </div>
       </div>
       <div class="modal-body">
-        <input
-          type="text"
-          class="form-control dark-input"
-          [(ngModel)]="tempUserName"
-          placeholder="Enter your name"
-        />
-      </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <input
+            *ngIf="isRegister"
+            type="text"
+            class="form-control dark-input"
+            [(ngModel)]="nom"
+            placeholder="Enter your name"
+          />
+          <input
+            *ngIf="isRegister"
+            type="text"
+            class="form-control dark-input"
+            [(ngModel)]="prenom"
+            placeholder="Enter your surname"
+          />
+          <input
+            type="email"
+            class="form-control dark-input"
+            [(ngModel)]="email"
+            placeholder="Enter your email"
+          />
+        </div>
+        </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveUserName()">Save</button>
+        <button *ngIf="isRegister" type="button" class="btn btn-primary" (click)="register()">Register</button>
+        <button *ngIf="!isRegister" type="button" class="btn btn-primary" (click)="login()">Login</button>
       </div>
     </div>
   </div>

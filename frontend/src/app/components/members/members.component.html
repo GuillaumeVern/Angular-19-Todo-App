@@ -1,0 +1,61 @@
+<div class="container mt-4">
+    <h1 class="mb-4">Members</h1>
+    <div class="row justify-content-center ">
+
+        <div class="col-md-12 ">
+            <div class="input-group mb-3">
+                <input class="form-control" [(ngModel)]="newUserName" placeholder="New user name" />
+                <input class="form-control" [(ngModel)]="newUserSurname" placeholder="New user surname" />
+                <input class="form-control" [(ngModel)]="newUserEmail" placeholder="New user email" />
+                <button class="btn btn-primary  " (click)="addMember()">
+                    Add
+                </button>
+            </div>
+
+            <div class="row g-3" *ngIf="members.length; else noMembers" cdkDropListGroup>
+                <div *ngFor="let member of members; let i = index" class="" @fadeInOut>
+                    <div class="card shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center" @slideIn>
+                            <div *ngIf="editingMemberIndex === i; else viewMemberMode" style="display: flex; flex-direction: row; gap: 10px;">
+                                <input [(ngModel)]="members[i].nom" class="form-control"
+                                    placeholder="Edit Member Name" />
+                                <input [(ngModel)]="members[i].prenom" class="form-control"
+                                    placeholder="Edit Member Surname" />
+                                <input [(ngModel)]="members[i].email" class="form-control"
+                                    placeholder="Edit Member Email" />
+                            </div>
+                            <ng-template #viewMemberMode>
+                                <h5 class="card-title mb-0">{{ member.nom }}</h5>
+                                <h5 class="card-title mb-0">{{ member.prenom }}</h5>
+                                <h5 class="card-title mb-0">{{ member.email }}</h5>
+                            </ng-template>
+                            <div class="d-flex">
+                                <button class="btn btn-sm btn-warning me-2" *ngIf="editingMemberIndex !== i"
+                                    (click)="editMember(i)">
+                                    Edit
+                                </button>
+                                <button class="btn btn-sm btn-success me-2" *ngIf="editingMemberIndex === i"
+                                    (click)="saveMember(i)">
+                                    Save
+                                </button>
+                                <button class="btn btn-sm btn-danger"
+                                    title="Delete Member" (click)="deleteMember(i)">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #noMembers>
+        <div class="no-category-container text-center">
+            <i class="fas fa-folder-open no-category-icon"></i>
+            <p class="no-category-text">
+                No cards available.<br />
+                Please add a card to get started!
+            </p>
+        </div>
+    </ng-template>
+</div>

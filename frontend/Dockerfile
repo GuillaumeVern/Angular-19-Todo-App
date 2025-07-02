@@ -8,4 +8,6 @@ RUN npm install -g @angular/cli
 
 RUN npm install
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+ENV NODE_ENV=development
+
+CMD ["ng", "serve", "--configuration", "development", "--host", "0.0.0.0", "--verbose"]

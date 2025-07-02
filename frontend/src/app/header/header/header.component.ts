@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, HostListener, AfterViewInit, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, NavigationEnd, RouterLink, RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd, RouterLink, RouterOutlet } from '@angular/router';
+import { BackendService } from '../../service/backend.service';
+import { User } from '../../models/user.model';
+import { UserSend } from '../../models/user.send.model';
 
-declare var bootstrap: any; // Ensure Bootstrap is available globally
+declare let bootstrap: any; // Ensure Bootstrap is available globally
 
 @Component({
   selector: 'app-header',
@@ -12,19 +15,29 @@ declare var bootstrap: any; // Ensure Bootstrap is available globally
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements AfterViewInit {
-  appName: string = 'To-Do App'; // Default App Name (editable)
-  userName: string = ''; // Stored username (requested once)
-  tempUserName: string = ''; // Temporary storage for user input
-  currentRoute: string = '';
-  isEditing: boolean = false;
+export class HeaderComponent implements OnInit {
+  appName = 'To-Do App'; // Default App Name (editable)
+  userName = ''; // Stored username (requested once)
+  tempUserName = ''; // Temporary storage for user input
+  nom = ''; // User's first name
+  prenom = ''; // User's last name
+  email = ''; // User's email
+  currentRoute = '';
+  isEditing = false;
   userNameModalInstance: any; // Modal instance
+  isRegister = false;
+  router = inject(Router); // Inject Router service
+  backendService = inject(BackendService); // Inject BackendService
+
 
   @ViewChild('appNameElement') appNameElement!: ElementRef;
 
-  constructor(private router: Router) {
+
+
+  constructor() {
     this.loadAppName();
-    this.loadUserName();
+
+    this.backendService.refreshTokenIfExpired();
 
     // Listen for route changes and close navbar automatically
     this.router.events.subscribe(event => {
@@ -35,9 +48,8 @@ export class HeaderComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    // If no username is set, ask for it using modal
-    if (!this.userName) {
+  ngOnInit() { 
+    if (this.backendService.isJwtExpired() || !localStorage.getItem('jwt')) {
       this.showUserNameModal();
     }
   }
@@ -63,11 +75,81 @@ export class HeaderComponent implements AfterViewInit {
     this.isEditing = false;
   }
 
-  // === User Name Functions ===
-  loadUserName() {
-    const storedUserName = localStorage.getItem('userName');
-    if (storedUserName) {
-      this.userName = storedUserName;
+  toggleRegister() {
+    this.isRegister = !this.isRegister;
+  }
+
+  register() { 
+    if (this.nom.trim() && this.prenom.trim() && this.email.trim()) {
+      const userData: UserSend = {
+        nom: this.nom.trim(),
+        prenom: this.prenom.trim(),
+        email: this.email.trim()
+      };
+
+      this.backendService.register(userData).then(response => {
+        console.log('User registered:', response);
+        localStorage.setItem('jwt', response.token);
+        localStorage.setItem('email', userData.email); 
+        this.getUserId()
+        if (this.userNameModalInstance) {
+        this.userNameModalInstance.hide();
+      }
+      }).catch(error => {
+        console.error('Registration error:', error);
+        alert('Registration failed. Please try again.');
+      });
+    } else {
+      alert("Please fill in all fields!");
+    }
+  }
+
+  login() {
+    if (this.email.trim()) {
+      this.backendService.login(this.email.trim()).then(response => {
+        console.log('User logged in:', response);
+        localStorage.setItem('jwt', response.token); // Store JWT token
+        localStorage.setItem('email', this.email);
+        this.getUserId()
+        if (this.userNameModalInstance) {
+        this.userNameModalInstance.hide();
+      }
+      }).catch(error => {
+        console.error('Login error:', error);
+        alert('Login failed. Please try again.');
+      });
+    } else {
+      alert("Please enter your email!");
+    }
+  }
+
+  logout() {
+    localStorage.removeItem('jwt'); // Remove JWT token
+    localStorage.removeItem('email'); // Remove email
+    localStorage.removeItem('userName'); // Remove user name
+    localStorage.removeItem('userId'); // Remove user ID
+    this.userName = ''; // Clear user name in component
+    this.router.navigate(['/todos']); // Redirect to login page
+    if (this.userNameModalInstance) {
+      this.userNameModalInstance.hide(); // Hide modal if it's open
+    }
+    this.showUserNameModal();
+  }
+
+  getUserId() {
+    const email = localStorage.getItem('email');
+    if (email) {
+      this.backendService.getUserData(email).then(user => {
+        console.log('User data:', user);
+        this.userName = `${user.nom} ${user.prenom}`;
+        localStorage.setItem('userName', this.userName);
+        if (user.id !== undefined) {
+          localStorage.setItem('userId', user.id.toString());
+        }
+        window.location.reload();
+      }).catch(error => {
+        console.error('Error fetching user data:', error);
+      });
     }
   }
 
@@ -119,4 +201,5 @@ export class HeaderComponent implements AfterViewInit {
       this.closeNavbar(); // Close navbar if clicked outside
     }
   }
+  
 }

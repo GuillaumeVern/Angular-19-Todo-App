@@ -22,29 +22,29 @@
       >
         <!-- Editable Task Input -->
         <input
-          *ngIf="task.editing"
+          *ngIf="editingTaskIndex === i"
           type="text"
-          [(ngModel)]="task.text"
+          [(ngModel)]="task.libelle"
           class="form-control form-control-sm me-2"
         />
 
         <!-- Task Display -->
         <span
-          *ngIf="!task.editing"
-          (click)="toggleTaskCompletion(i)"
+          *ngIf="editingTaskIndex !== i"
+          (click)="editTask(i)"
           class="task-text flex-grow-1"
         >
           <i class="fas fa-check-circle task-icon me-2" *ngIf="task.completed"></i>
-          {{ task.text }}
+          {{ task.libelle }}
         </span>
 
         <!-- Task Actions -->
         <div class="d-flex align-items-center">
           <!-- Save Button -->
           <button
-            *ngIf="task.editing"
+            *ngIf="editingTaskIndex === i"
             class="btn btn-sm btn-primary me-2 mt-2 p-2"
-            (click)="toggleEditTask(i)"
+            (click)="updateTask(i)"
           >
             <i class="fas fa-save"></i>
           </button>
@@ -64,7 +64,7 @@
                 </button>
               </li>
               <li>
-                <button class="dropdown-item" (click)="toggleEditTask(i)">
+                <button class="dropdown-item" (click)="editTask(i)">
                   Edit
                 </button>
               </li>
