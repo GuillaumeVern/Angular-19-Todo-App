@@ -1,28 +1,25 @@
--- Schema creation
 CREATE SCHEMA IF NOT EXISTS todoapp;
 
 -- Switch to the schema
 SET search_path TO todoapp;
 
--- Create 'user' table
-CREATE TABLE "user" (
+-- Create 'users' table
+CREATE TABLE todoapp.users (
   id SERIAL PRIMARY KEY,
   nom VARCHAR(50) NOT NULL,
   prenom VARCHAR(50) NOT NULL,
-email VARCHAR(255) NOT NULL UNIQUE,
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  email VARCHAR(255) NOT NULL UNIQUE
 );
 
--- Create 'task' table
-CREATE TABLE task (
+-- Create 'tasks' table
+CREATE TABLE todoapp.tasks (
   id SERIAL PRIMARY KEY,
   libelle TEXT NOT NULL,
   completed BOOLEAN NOT NULL,
-  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   user_id INT NOT NULL,
   CONSTRAINT fk_user FOREIGN KEY (user_id)
-    REFERENCES "user" (id)
-    ON DELETE NO ACTION
+    REFERENCES "users" (id)
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
 );
 

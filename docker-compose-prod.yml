@@ -18,6 +18,8 @@ services:
       - 44600:8080
     depends_on:
       - db
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     volumes:
       - ./backend/target:/app
     command: ["java", "-jar", "/app/app.jar"]
@@ -29,7 +31,7 @@ services:
       - 5432:5432
     volumes:
       - ./db:/docker-entrypoint-initdb.d
-      - db_data:/var/lib/postgresql
+      - db_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD

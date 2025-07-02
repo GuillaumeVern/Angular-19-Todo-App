@@ -21,6 +21,15 @@ services:
       - 44600:8080
     depends_on:
       - db
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/pom.xml:/app/pom.xml
+    environment:
+      - SPRING_PROFILES_ACTIVE=$SPRING_PROFILES_ACTIVE
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+      - JWT_SECRET=$JWT_SECRET
 
   db:
     container_name: db
@@ -28,8 +37,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
-      - db_data:/var/lib/postgresql
+      - ./db:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD

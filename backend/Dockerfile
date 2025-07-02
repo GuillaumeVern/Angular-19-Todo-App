@@ -1,18 +1,13 @@
-FROM jelastic/maven:3.9.5-openjdk-21 AS build
+FROM jelastic/maven:3.9.5-openjdk-21
 
 WORKDIR /app
 
 COPY pom.xml .
 COPY src ./src
 
-RUN mvn clean package -DskipTests
-
-FROM openjdk:21-jdk-slim
-
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/actuator/health || exit 1
+
+ENTRYPOINT ["sh", "-c", "mvn clean package -DskipTests && java -jar target/*.jar"]
