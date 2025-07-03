@@ -88,9 +88,11 @@ pipeline {
         stage('Run e2e tests') {
             steps {
                 script {
-                    dir(frontendDir) {
-                        sh 'npm install'
-                        sh 'npx cypress run --browser chromium --config baseUrl=http://localhost:4200'
+                    wrap([$class: 'Xvfb']) {
+                        dir(frontendDir) {
+                            sh 'npm install'
+                            sh 'npx cypress run --browser chromium --config baseUrl=http://localhost:4200'
+                        }
                     }
                 }
             }
