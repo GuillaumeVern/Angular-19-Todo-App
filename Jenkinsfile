@@ -7,6 +7,10 @@ def nginxDir = 'nginx'
 pipeline {
     agent any
 
+    environment {
+        CYPRESS_CACHE_FOLDER = "${WORKSPACE}/.cache/Cypress"
+    }
+
     tools {
         nodejs 'nodejs-22'
         maven 'Maven-3.9'
@@ -76,6 +80,17 @@ pipeline {
                 script {
                     dir(backendDir) {
                         sh 'mvn test -Dspring.profiles.active=test'
+                    }
+                }
+            }
+        }
+
+        stage('Run e2e tests') {
+            steps {
+                script {
+                    dir(frontendDir) {
+                        sh 'npm install'
+                        sh 'npx cypress run --browser chromium --config baseUrl=http://localhost:4200'
                     }
                 }
             }

@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromiumHeadless",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "cypress:run": "cypress run --browser chromium"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +34,7 @@
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.1.1",
+    "cypress": "^14.5.1",
     "eslint": "^9.29.0",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",
